@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Phân tích Tài chính AI</title>
+    <title>VNG Group - Báo cáo Tài chính</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #1a73e8;
-            --secondary-color: #4285f4;
+            --primary-color: #f15a22;  /* VNG Orange */
+            --secondary-color: #2d3436;
             --background-color: #f8f9fa;
             --text-primary: #202124;
             --text-secondary: #5f6368;
@@ -24,75 +24,121 @@
             font-family: 'Roboto', sans-serif;
             line-height: 1.6;
             color: var(--text-primary);
-            background-color: var(--background-color);
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
             padding: 2rem;
         }
 
         .container {
             max-width: 800px;
             margin: 0 auto;
+            width: 100%;
         }
 
         .header {
             text-align: center;
-            margin-bottom: 2rem;
-            padding: 2rem;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: white;
-            border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 1rem;
+            padding: 2.5rem;
+            background: white;
+            color: var(--text-primary);
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border: 2px solid var(--primary-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--primary-color);
+        }
+
+        .logo {
+            width: 180px;
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
         }
 
         .header h1 {
-            font-size: 2.5rem;
+            font-size: 2.8rem;
             margin-bottom: 1rem;
+            color: var(--primary-color);
+            font-weight: 700;
+            letter-spacing: -0.5px;
         }
 
         .header p {
-            font-size: 1.1rem;
-            opacity: 0.9;
+            font-size: 1.2rem;
+            color: var(--secondary-color);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.8;
         }
 
         .main-content {
             background: white;
-            padding: 2rem;
-            border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: var(--text-secondary);
-        }
-
-        input[type="text"] {
-            width: 100%;
-            padding: 0.8rem;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 1rem;
+            padding: 3rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            text-align: center;
         }
 
         .btn {
             display: inline-block;
-            padding: 0.8rem 1.5rem;
+            padding: 1.2rem 3rem;
             background-color: var(--primary-color);
             color: white;
             text-decoration: none;
-            border-radius: 5px;
-            transition: background-color 0.2s;
+            border-radius: 8px;
+            transition: all 0.3s ease;
             border: none;
             cursor: pointer;
-            font-size: 1rem;
+            font-size: 1.2rem;
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(241, 90, 34, 0.3);
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                120deg,
+                transparent,
+                rgba(255, 255, 255, 0.3),
+                transparent
+            );
+            transition: 0.5s;
         }
 
         .btn:hover {
-            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(241, 90, 34, 0.4);
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
         }
 
         /* Loading styles */
@@ -102,27 +148,28 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.95);
             display: none;
             justify-content: center;
             align-items: center;
             z-index: 1000;
             flex-direction: column;
-            gap: 20px;
+            gap: 25px;
+            backdrop-filter: blur(5px);
         }
 
         .loading-text {
             color: var(--primary-color);
-            font-size: 18px;
+            font-size: 22px;
             font-weight: 500;
             text-align: center;
         }
 
         .loading-bar {
-            width: 250px;
+            width: 280px;
             height: 4px;
             background: #e0e0e0;
-            border-radius: 2px;
+            border-radius: 4px;
             overflow: hidden;
             position: relative;
         }
@@ -138,18 +185,9 @@
         }
 
         @keyframes progress {
-            0% {
-                width: 0%;
-                left: 0;
-            }
-            50% {
-                width: 100%;
-                left: 0;
-            }
-            100% {
-                width: 0%;
-                left: 100%;
-            }
+            0% { width: 0%; left: 0; }
+            50% { width: 100%; left: 0; }
+            100% { width: 0%; left: 100%; }
         }
 
         @media (max-width: 768px) {
@@ -158,11 +196,26 @@
             }
 
             .header {
-                padding: 1.5rem;
+                padding: 2rem;
+                margin-bottom: 0rem;
             }
 
             .header h1 {
-                font-size: 2rem;
+                font-size: 2.2rem;
+            }
+
+            .header p {
+                font-size: 1.1rem;
+            }
+
+            .main-content {
+                padding: 0rem;
+            }
+
+            .btn {
+                padding: 1rem 2.5rem;
+                font-size: 1.1rem;
+                width: 100%;
             }
         }
     </style>
@@ -170,29 +223,21 @@
         document.addEventListener('DOMContentLoaded', function() {
             const form = document.querySelector('form');
             const loadingContainer = document.querySelector('.loading-container');
-            const submitButton = document.querySelector('button[type="submit"]');
+            const generateButton = document.querySelector('.btn');
+
+            generateButton.addEventListener('click', function() {
+                loadingContainer.style.display = 'flex';
+                generateButton.disabled = true;
+                
+                // Submit form to generate report
+                form.submit();
+            });
 
             // Reset loading state when page is loaded from back/forward cache
             window.addEventListener('pageshow', function(event) {
                 if (event.persisted) {
                     loadingContainer.style.display = 'none';
-                    submitButton.disabled = false;
-                }
-            });
-
-            // Reset form and loading state when navigating back
-            window.addEventListener('popstate', function() {
-                loadingContainer.style.display = 'none';
-                submitButton.disabled = false;
-                form.reset();
-            });
-
-            form.addEventListener('submit', function(e) {
-                // Only show loading if form is actually being submitted
-                if (!form.hasAttribute('data-submitted')) {
-                    loadingContainer.style.display = 'flex';
-                    submitButton.disabled = true;
-                    form.setAttribute('data-submitted', 'true');
+                    generateButton.disabled = false;
                 }
             });
         });
@@ -201,8 +246,8 @@
 <body>
     <div class="loading-container">
         <div class="loading-text">
-            Đang tạo báo cáo...<br>
-            <span style="font-size: 14px; opacity: 0.8">Quá trình này có thể mất vài phút</span>
+            Đang tạo báo cáo VNG Group...<br>
+            <span style="font-size: 16px; opacity: 0.8">Quá trình này có thể mất vài phút</span>
         </div>
         <div class="loading-bar">
             <div class="loading-progress"></div>
@@ -211,17 +256,15 @@
 
     <div class="container">
         <header class="header">
-            <h1>Phân tích Tài chính AI</h1>
-            <p>Công cụ phân tích tài chính thông minh sử dụng AI</p>
+            <img src="../static/images/lseg-logo.png" alt="VNG Logo" class="logo">
+            <h1>VNG Group</h1>
+            <p>Hệ thống tạo báo cáo tài chính tự động với phân tích chuyên sâu và trình bày chuyên nghiệp</p>
         </header>
 
         <main class="main-content">
             <form action="/analyze" method="POST">
-                <div class="form-group">
-                    <label for="stock_code">Mã cổ phiếu:</label>
-                    <input type="text" id="stock_code" name="stock_code" required placeholder="Ví dụ: VNG">
-                </div>
-                <button type="submit" class="btn">Phân tích</button>
+                <input type="hidden" name="stock_code" value="VNZ">
+                <button type="submit" class="btn">Tạo Báo Cáo</button>
             </form>
         </main>
     </div>

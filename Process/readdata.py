@@ -222,8 +222,8 @@ def get_stock_info(symbol: str) -> Dict[str, Any]:
         return {
             'name': f'{symbol} Group',
             'symbol': symbol,
-            'sector': 'Consumer Goods',
-            'industry': 'Food & Beverage',
+            'sector': 'Technology',
+            'industry': 'Video Games',
             'description': 'VNG Corporation, founded in 2004, is a leading technology company in Vietnam, primarily focused on digital entertainment, social networking, and e-commerce. The company has expanded its reach to various sectors, becoming a prominent player in Vietnam''s internet industry. VNG Group is a tech conglomerate with a strong presence in gaming, social networking, e-commerce, and fintech, driven by a vision to innovate and lead the digital transformation in Vietnam and Southeast Asia.',
             'address': 'VIETNAM',
             'phone': '+84 (22) 8 3724 4555',
