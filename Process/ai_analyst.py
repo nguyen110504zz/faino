@@ -281,7 +281,7 @@ def analyze_financial_data(model, financial_data: Dict[str, Any], ratios: Dict[s
 
 def generate_recommendations(model, analysis: Dict[str, Any]) -> Dict[str, Any]:
     """
-    Generate investment recommendations based on the analysis
+    Generate investment recommendations based on the analysis (no effects)
     """
     try:
         # Extract key metrics for recommendations
@@ -300,7 +300,7 @@ def generate_recommendations(model, analysis: Dict[str, Any]) -> Dict[str, Any]:
         - Financial Summary: {analysis.get('financial_summary', '')}
         - Profitability Analysis: {analysis.get('profitability_analysis', '')}
 
-        Please provide a clear investment recommendation in 3-4 sentences that includes:
+        Please provide a clear investment recommendation in 3-4 sentences that includes (no effects bold):
         1. Overall investment stance (Buy/Hold/Sell)
         2. Key reasons for the recommendation
         3. Main risks to consider
