@@ -29,7 +29,7 @@ def read_price_data(symbol: str) -> pd.DataFrame:
         return pd.DataFrame()
 
 def create_price_charts(symbol: str) -> dict:
-    """Create 6-month and 5-year price charts"""
+    """Create 6-month and 3-year price charts"""
     try:
         # Đọc dữ liệu giá
         df = read_price_data(symbol)
@@ -65,19 +65,19 @@ def create_price_charts(symbol: str) -> dict:
         
         plt.figure(figsize=(10, 6))
         plt.plot(df_5y['Date'], df_5y['Close'], color='blue')
-        plt.title(f'{symbol} - 5 Years Price Chart')
+        plt.title(f'{symbol} - 3 Years Price Chart')
         plt.xticks(rotation=45)
         plt.grid(True, linestyle='--', alpha=0.7)
         plt.tight_layout()
         
         # Lưu biểu đồ 5 năm
-        five_year_path = os.path.join(charts_dir, f'{symbol}_5y.png')
+        five_year_path = os.path.join(charts_dir, f'{symbol}_3y.png')
         plt.savefig(five_year_path)
         plt.close()
 
         return {
             'six_months': f'charts/{symbol}_6m.png',
-            'five_years': f'charts/{symbol}_5y.png'
+            'three_years': f'charts/{symbol}_3y.png'
         }
     except Exception as e:
         print(f"Error creating price charts: {e}")

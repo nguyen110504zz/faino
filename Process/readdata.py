@@ -46,17 +46,17 @@ def merge_balance_sheets(dfs, search_term):
             logger.info(f"Tìm kiếm theo tên '{search_term}' trong file năm {year}")
 
         if not stock_data.empty:
-            logger.info(f"✅ Tìm thấy {len(stock_data)} dòng dữ liệu cho {search_term} năm {year}")
+            logger.info(f"Tìm thấy {len(stock_data)} dòng dữ liệu cho {search_term} năm {year}")
             data.append(stock_data)
         else:
             logger.warning(f"⚠️ Không tìm thấy dữ liệu cho {search_term} năm {year}")
 
     if data:
         result = pd.concat(data, ignore_index=True)
-        logger.info(f"✅ Tổng cộng tìm thấy {len(result)} dòng dữ liệu cho {search_term}")
+        logger.info(f"Tổng cộng tìm thấy {len(result)} dòng dữ liệu cho {search_term}")
         return result
     else:
-        logger.error(f"❌ Không tìm thấy dữ liệu cho '{search_term}' trong tất cả các năm")
+        logger.error(f"Không tìm thấy dữ liệu cho '{search_term}' trong tất cả các năm")
         return pd.DataFrame()
 
 
@@ -110,18 +110,18 @@ def process_financial_data(search_term):
         valid_columns = ["Chỉ tiêu"] + expected_years
 
         if len(transposed_df.columns) != len(valid_columns):
-            print(f"⚠️ Phát hiện số cột không khớp. Đang điều chỉnh...")
+            print(f"Phát hiện số cột không khớp. Đang điều chỉnh...")
             transposed_df = transposed_df.iloc[:, :len(valid_columns)]
 
         # Gán lại tên cột
         transposed_df.columns = valid_columns
         transposed_df.fillna(0, inplace=True)
 
-        print(f"✅ Dữ liệu sau khi điều chỉnh: {transposed_df.shape[1]} cột")
+        print(f"Dữ liệu sau khi điều chỉnh: {transposed_df.shape[1]} cột")
         return transposed_df
 
     except Exception as e:
-        print(f"🛑 Lỗi trong quá trình xử lý dữ liệu: {e}")
+        print(f"Lỗi trong quá trình xử lý dữ liệu: {e}")
         return pd.DataFrame()
 
 def get_stock_info(symbol: str) -> Dict[str, Any]:
@@ -224,12 +224,12 @@ def get_stock_info(symbol: str) -> Dict[str, Any]:
             'symbol': symbol,
             'sector': 'Technology',
             'industry': 'Video Games',
-            'description': 'VNG Corporation, founded in 2004, is a leading technology company in Vietnam, primarily focused on digital entertainment, social networking, and e-commerce. The company has expanded its reach to various sectors, becoming a prominent player in Vietnam''s internet industry. VNG Group is a tech conglomerate with a strong presence in gaming, social networking, e-commerce, and fintech, driven by a vision to innovate and lead the digital transformation in Vietnam and Southeast Asia.',
+            'description': 'VNG Corporation, founded in 2004, is a leading technology company in Vietnam, primarily focused on digital entertainment, social networking, and e-commerce. The company has expanded its reach to various sectors, becoming a prominent player in Vietnam''s internet industry. VNG Group is a tech conglomerate with a strong presence in gaming, social networking, e-commerce, and fintech, driven by a vision to innovate and lead the digital transformation in Vietnam and Southeast Asia. Stock code VNZ of VNG Corporation will officially trade on UPCoM from January 5, 2023 at a price of VND 240,000/share.',
             'address': 'VIETNAM',
             'phone': '+84 (22) 8 3724 4555',
             'website': 'Start@vng.com.vn',
             'employees': 34816,
-            'market_cap': '169,720.61B',
+            'market_cap': '9,712B',
             'close_price': f"{close_price:,.0f}",
             'avg_volume_5d': avg_volume_5d,
             'avg_volume_10d': avg_volume_10d,
@@ -238,7 +238,7 @@ def get_stock_info(symbol: str) -> Dict[str, Any]:
             'currency': 'VND',
             'beta': '-',
             'isin_code': 'VN000000HPG4',
-            'exchange_code': 'HNX',
+            'exchange_code': 'VNZ',
             'one_day_change': one_day_change,
             'five_day_change': five_day_change,
             'three_month_change': three_month_change,
