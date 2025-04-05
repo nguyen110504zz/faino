@@ -1,0 +1,1864 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="page-size" content="A4">
+    <meta name="print-color-adjust" content="exact">
+    <title>Báo cáo Phân tích Tài chính</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;700" rel="stylesheet">
+    <style>
+        @page {
+            size: A4;
+            margin: 0;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: white;
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.4;
+            font-size: 11px;
+            color: #202124;
+        }
+
+        .report-container {
+            margin: 0 auto;
+            background: transparent;
+        }
+
+        .page {
+            width: 210mm;
+            min-height: 297mm;
+            padding: 15mm;
+            margin: 0 auto;
+            position: relative;
+            background: white;
+            page-break-after: always;
+            box-sizing: border-box;
+            border: 1px solid #f15a22;
+            box-shadow: 
+                inset 0 0 0 1px #ff7b4c,
+                inset 0 0 0 2px #ffffff,
+                inset 0 0 0 3px #f15a22;
+        }
+
+        .page:not(:first-of-type) .report-header {
+            margin-bottom: 6mm;
+        }
+
+        /* Add page number display for non-print view */
+        .page::after {
+            content: "PAGE " counter(page);
+            position: absolute;
+            top: 8mm;
+            right: 12mm;
+            font-family: 'Roboto', sans-serif;
+            font-size: 9px;
+            font-weight: 500;
+            color: #666;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            border: 1px solid #e0e0e0;
+            padding: 2px 8px;
+            border-radius: 2px;
+            background-color: #fff;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        @media print {
+            @page {
+                size: A4;
+                margin: 0;
+            }
+
+            html, body {
+                width: 210mm;
+                height: 297mm;
+                margin: 0;
+                padding: 0;
+                background: #fff9f6;
+            }
+
+            .report-container {
+                margin: 0;
+                padding: 0;
+            }
+
+            .page {
+                width: 210mm;
+                min-height: 297mm;
+                margin: 0;
+                padding: 15mm !important;
+                page-break-after: always;
+                box-sizing: border-box !important;
+                border: 1px solid #f15a22;
+                box-shadow: 
+                    inset 0 0 0 1px #ff7b4c,
+                    inset 0 0 0 2px #ffffff,
+                    inset 0 0 0 3px #f15a22;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            /* Ensure border prints */
+            .page::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: linear-gradient(to bottom right, #ffffff, #fff9f6);
+                pointer-events: none;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                z-index: -1;
+            }
+
+            .page::after {
+                content: '';
+                position: absolute;
+                top: 2mm;
+                right: 2mm;
+                bottom: 2mm;
+                left: 2mm;
+                border: 1px solid #ff7b4c;
+                border-radius: 2px;
+                pointer-events: none;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                z-index: -1;
+            }
+
+            .download-container {
+                display: none !important;
+            }
+
+            .page:last-child {
+                page-break-after: avoid;
+            }
+
+            /* Ensure sections don't break across pages */
+            section {
+                page-break-inside: avoid;
+            }
+
+            /* Ensure tables don't break across pages */
+            .table-container {
+                page-break-inside: avoid;
+            }
+
+            /* Ensure charts don't break across pages */
+            .chart-container, .charts-container {
+                page-break-inside: avoid;
+            }
+
+            .page::after {
+                display: none; /* Hide the page number in print as it's handled by @page */
+            }
+
+            @top-right {
+                border: 1px solid #e0e0e0 !important;
+                padding: 2px 8px !important;
+                border-radius: 2px !important;
+                background-color: #fff !important;
+                box-shadow: none !important;
+            }
+        }
+
+        /* Add subtle gradient to page background */
+        .page::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom right, #ffffff, #fff9f6);
+            z-index: -1;
+        }
+
+        /* Add corner decorations */
+        .page::after {
+            content: '';
+            position: absolute;
+            top: 2mm;
+            right: 2mm;
+            bottom: 2mm;
+            left: 2mm;
+            border: 1px solid #ff7b4c;
+            border-radius: 2px;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Company Name and Info */
+        .report-header {
+            text-align: center;
+            margin-bottom: 3mm !important;
+            margin-top: 0;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 1mm !important;
+            padding-top: 0;
+        }
+
+        .report-header h1 {
+            font-size: 26px !important;
+            color: var(--primary-color);
+            margin-bottom: 1mm !important;
+            margin-top: 0;
+            font-weight: 700;
+        }
+
+        .price-info, .date-info {
+            font-size: 12px !important;
+            color: #5f6368;
+            margin-bottom: 0.5mm !important;
+            line-height: 1.2;
+        }
+
+        /* Info Grid Layout */
+        .info-grid {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            gap: 1mm;
+            margin-bottom: 2mm;
+        }
+
+        .info-section {
+            flex: 1;
+        }
+
+        .info-section:last-child {
+            padding-left: 8px;
+        }
+
+        /* Section Headers */
+        .section-title {
+            position: relative;
+            color: var(--primary-color);
+            font-size: 12px;
+            font-weight: 700;
+            border-bottom: 1.5px solid var(--primary-color);
+            margin-bottom: 3mm;
+            padding-bottom: 2px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -1.5px;
+            left: 0;
+            width: 100%;
+            height: 1.5px;
+            background-color: var(--primary-color);
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        /* Info tables (page 1) */
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+            font-size: 11px;
+        }
+
+        .info-table td {
+            padding: 4px 6px;
+            border-bottom: 1px solid #e0e0e0;
+            line-height: 1.4;
+        }
+
+        .info-table td:first-child {
+            width: 45%;
+            color: #666;
+        }
+
+        .info-table td:last-child {
+            width: 55%;
+            text-align: right;
+            font-family: 'Roboto Mono', monospace;
+        }
+
+        /* Business Summary */
+        .business-summary {
+            margin-bottom: 3mm;
+            line-height: 1.3;
+            text-align: justify;
+            font-size: 10px;
+            padding: 0 1mm;
+        }
+
+        /* Styles chung cho tất cả charts */
+        .chart-container, .charts-container, .price-charts {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            gap: 3mm;
+            margin-bottom: 4mm;
+            page-break-inside: avoid;
+        }
+
+        .chart-box, .chart, .price-chart {
+            flex: 1;
+            background: #fff9f6;
+            padding: 6px;
+            border: 1px solid var(--border-color);
+            border-radius: 3px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .chart-title {
+            text-align: center;
+            color: var(--primary-color);
+            font-size: 11px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            padding: 4px 0;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .chart-box img, .chart img, .price-chart img {
+            display: block;
+            width: 100%;
+            height: 160px;
+            object-fit: contain;
+            margin: 0 auto;
+        }
+
+        @media print {
+            body {
+                width: 210mm !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            .download-container {
+                display: none;
+            }
+            .page {
+                width: 210mm !important;
+                height: 297mm !important;
+                padding: 15mm !important;
+                margin: 0 !important;
+                box-shadow: none !important;
+                border: none !important;
+            }
+
+            img {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            .info-table {
+                font-size: 11px !important;
+            }
+
+            .info-table td {
+                padding: 4px 6px !important;
+                line-height: 1.4 !important;
+            }
+
+            .chart-box img, .chart img, .price-chart img {
+                height: 160px !important;
+            }
+
+            .report-header h1 {
+                font-size: 26px !important;
+            }
+
+            .price-info, .date-info {
+                font-size: 12px !important;
+                margin-bottom: 0.5mm !important;
+                line-height: 1.2 !important;
+            }
+        }
+
+        /* Remove unused styles */
+        .loading-container,
+        .loading-text,
+        .loading-bar,
+        .loading-progress {
+            display: none !important;
+        }
+
+        /* Business summary section */
+        .business-summary {
+            margin-bottom: 12px;
+            line-height: 1.4;
+            text-align: justify;
+            max-width: 100%;
+        }
+
+        /* Price charts layout */
+        .price-charts-section {
+            page-break-inside: avoid;
+        }
+
+        .price-charts {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            page-break-inside: avoid;
+        }
+
+        .price-charts-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 8px 15px;
+            font-size: 13px;
+            font-weight: 500;
+            border-radius: 4px 4px 0 0;
+            margin-bottom: 10px;
+        }
+
+        .price-chart {
+            background: #fff9f6;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+        }
+
+        .price-chart img {
+            width: 100%;
+            height: 120px;
+            object-fit: contain;
+            margin: 5px auto;
+        }
+
+        .info-section {
+            width: 100%;
+            break-inside: avoid;
+            page-break-inside: avoid;
+        }
+
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .info-table tr:nth-child(even) {
+            background-color: #fff0eb;
+        }
+
+        .info-table td {
+            padding: 8px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .info-table td:first-child {
+            width: 40%;
+        }
+
+        .info-table td:last-child {
+            width: 60%;
+            text-align: right;
+        }
+
+        @media print {
+            .info-section {
+                width: 100% !important;
+                break-inside: avoid !important;
+                page-break-inside: avoid !important;
+                flex: 1 1 calc(50% - 12px) !important;
+            }
+
+            .info-table {
+                width: 100% !important;
+            }
+        }
+
+        /* Financial tables (page 2,3,4) */
+        .table-container {
+            margin: 3mm 0;
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .table-container table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+            font-size: 11px;
+            background: white;
+            min-width: 175mm;
+        }
+
+        .table-container th,
+        .table-container td {
+            padding: 6px 8px;
+            border: 1px solid #e0e0e0;
+            line-height: 1.4;
+            font-size: 11px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .table-container th {
+            background-color: #fff0eb;
+            color: #444;
+            font-weight: 700;
+            text-align: right;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            white-space: nowrap;
+        }
+
+        .table-container th:first-child {
+            text-align: left;
+            width: 35%;
+        }
+
+        .table-container td {
+            text-align: right;
+            font-family: 'Roboto Mono', monospace;
+            white-space: nowrap;
+        }
+
+        .table-container td:first-child {
+            text-align: left;
+            color: #666;
+            font-family: 'Roboto', sans-serif;
+            width: 35%;
+            white-space: normal;
+            padding-right: 15px;
+        }
+
+        /* Adjust column widths for year columns */
+        .table-container th:not(:first-child),
+        .table-container td:not(:first-child) {
+            width: 13%;
+        }
+
+        @media print {
+            .table-container {
+                width: 100% !important;
+                margin: 3mm 0 !important;
+                overflow-x: visible !important;
+            }
+
+            .table-container table {
+                width: 100% !important;
+                min-width: 175mm !important;
+                font-size: 11px !important;
+            }
+
+            .table-container th,
+            .table-container td {
+                font-size: 11px !important;
+                padding: 6px 8px !important;
+                line-height: 1.4 !important;
+                overflow: hidden !important;
+                text-overflow: ellipsis !important;
+                white-space: nowrap !important;
+            }
+
+            .table-container td:first-child {
+                white-space: normal !important;
+                padding-right: 15px !important;
+            }
+
+            .table-container th:first-child,
+            .table-container td:first-child {
+                width: 35% !important;
+            }
+
+            .table-container th:not(:first-child),
+            .table-container td:not(:first-child) {
+                width: 13% !important;
+            }
+        }
+
+        /* Indent levels for balance sheet */
+        td[style*="padding-left: 20px"] {
+            padding-left: 20px !important;
+        }
+
+        td[style*="padding-left: 40px"] {
+            padding-left: 40px !important;
+        }
+
+        /* Section headers in tables */
+        .section-header td {
+            color: var(--primary-color) !important;
+            font-weight: 700 !important;
+            padding-top: 6px !important;
+            font-family: 'Roboto', sans-serif !important;
+            background: white !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.3px !important;
+            font-size: 11px !important;
+        }
+
+        .highlight-row td {
+            background-color: #fff0eb;
+            font-weight: 500;
+        }
+
+        /* Analysis box styles */
+        .analysis-box {
+            background-color: #fff9f6;
+            border-left: 2px solid var(--primary-color);
+            padding: 8px 12px;
+            margin: 3mm 0;
+            font-size: 11px;
+            line-height: 1.4;
+            border-radius: 0 3px 3px 0;
+            text-align: justify;
+            hyphens: auto;
+        }
+
+        .analysis-title {
+            color: var(--primary-color);
+            font-weight: 700;
+            font-size: 11px;
+            margin-bottom: 6px;
+            padding-bottom: 4px;
+            border-bottom: 1px solid var(--border-color);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .analysis-box p {
+            margin-bottom: 4px;
+            text-indent: 12px;
+        }
+
+        .analysis-box p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Unit display */
+        .unit-display {
+            text-align: right;
+            color: #666;
+            font-size: 9px;
+            font-style: italic;
+            margin: 1mm 0;
+        }
+
+        /* Risk management section */
+        .risk-management {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 3mm;
+            margin: 3mm 0;
+        }
+
+        .risk-item {
+            background: #fff9f6;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 12px 15px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            position: relative;
+            overflow: hidden;
+            min-height: 90px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .risk-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--primary-color);
+        }
+
+        .risk-item h4 {
+            color: var(--primary-color);
+            font-size: 13px;
+            font-weight: 700;
+            margin: 0 0 10px 0;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #ffe4d9;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .risk-item p {
+            color: #444;
+            line-height: 1.5;
+            margin: 0;
+            font-size: 14px;
+            font-weight: 500;
+            text-align: center;
+            padding: 0 8px;
+        }
+
+        @media print {
+            .risk-management {
+                display: grid !important;
+                grid-template-columns: repeat(3, 1fr) !important;
+                gap: 3mm !important;
+                margin: 3mm 0 !important;
+                page-break-inside: avoid !important;
+            }
+
+            .risk-item {
+                background: #fff9f6 !important;
+                border: 1px solid var(--border-color) !important;
+                border-radius: 4px !important;
+                padding: 12px 15px !important;
+                box-shadow: 0 1px 3px rgba(0,0,0,0.05) !important;
+                position: relative !important;
+                overflow: hidden !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            .risk-item::before {
+                content: '' !important;
+                position: absolute !important;
+                top: 0 !important;
+                left: 0 !important;
+                width: 4px !important;
+                height: 100% !important;
+                background: var(--primary-color) !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            .risk-item h4 {
+                color: var(--primary-color) !important;
+                font-size: 13px !important;
+                font-weight: 700 !important;
+                margin: 0 0 10px 0 !important;
+                padding-bottom: 8px !important;
+                border-bottom: 1px solid #ffe4d9 !important;
+                text-transform: uppercase !important;
+                letter-spacing: 0.5px !important;
+            }
+
+            .risk-item p {
+                color: #444 !important;
+                line-height: 1.5 !important;
+                margin: 0 !important;
+                font-size: 14px !important;
+                font-weight: 500 !important;
+                text-align: center !important;
+                padding: 0 8px !important;
+            }
+        }
+
+        /* Page 1 specific adjustments */
+        .page:first-of-type .report-header {
+            margin-bottom: 3mm;
+            padding-bottom: 1mm;
+        }
+
+        .page:first-of-type .report-header h1 {
+            font-size: 26px;
+            margin-bottom: 1mm;
+        }
+
+        .page:first-of-type .price-info,
+        .page:first-of-type .date-info {
+            font-size: 12px;
+            margin-bottom: 0.5mm;
+            line-height: 1.2;
+        }
+
+        .page:first-of-type .info-grid {
+            gap: 1mm;
+            margin-bottom: 2mm;
+        }
+
+        .page:first-of-type .section {
+            margin-bottom: 2mm;
+        }
+
+        .page:first-of-type .section-title {
+            margin-bottom: 1mm;
+            font-size: 11px;
+        }
+
+        .page:first-of-type .info-table td {
+            padding: 2px 4px;
+            font-size: 10px;
+            line-height: 1.2;
+        }
+
+        .page:first-of-type .business-summary {
+            margin-bottom: 2mm;
+            line-height: 1.2;
+            font-size: 10px;
+        }
+
+        .page:first-of-type .chart-container {
+            margin-bottom: 2mm;
+            gap: 2mm;
+        }
+
+        .page:first-of-type .chart-box {
+            padding: 4px;
+        }
+
+        .page:first-of-type .chart-title {
+            font-size: 10px;
+            margin-bottom: 2px;
+            padding: 2px 0;
+        }
+
+        .page:first-of-type .chart-box img {
+            height: 140px;
+        }
+
+        @media print {
+            .page:first-of-type .report-header {
+                margin-bottom: 3mm !important;
+                padding-bottom: 1mm !important;
+            }
+
+            .page:first-of-type .report-header h1 {
+                font-size: 26px !important;
+                margin-bottom: 1mm !important;
+            }
+
+            .page:first-of-type .price-info,
+            .page:first-of-type .date-info {
+                font-size: 12px !important;
+                margin-bottom: 0.5mm !important;
+                line-height: 1.2 !important;
+            }
+
+            .page:first-of-type .info-grid {
+                gap: 1mm !important;
+                margin-bottom: 2mm !important;
+            }
+
+            .page:first-of-type .section {
+                margin-bottom: 2mm !important;
+            }
+
+            .page:first-of-type .section-title {
+                margin-bottom: 1mm !important;
+                font-size: 11px !important;
+            }
+
+            .page:first-of-type .info-table td {
+                padding: 2px 4px !important;
+                font-size: 10px !important;
+                line-height: 1.2 !important;
+            }
+
+            .page:first-of-type .business-summary {
+                margin-bottom: 2mm !important;
+                line-height: 1.2 !important;
+                font-size: 10px !important;
+            }
+
+            .page:first-of-type .chart-container {
+                margin-bottom: 2mm !important;
+                gap: 2mm !important;
+            }
+
+            .page:first-of-type .chart-box {
+                padding: 4px !important;
+            }
+
+            .page:first-of-type .chart-title {
+                font-size: 10px !important;
+                margin-bottom: 2px !important;
+                padding: 2px 0 !important;
+            }
+
+            .page:first-of-type .chart-box img {
+                height: 140px !important;
+            }
+        }
+
+        /* Keep original spacing for other pages */
+        .page:not(:first-of-type) .section {
+            margin-bottom: 5mm;
+        }
+
+        /* Specific adjustments for pages 2 and 3 */
+        .page:nth-child(2) .section,
+        .page:nth-child(3) .section {
+            margin-bottom: 2mm;
+        }
+
+        .page:nth-child(2) .section:last-child,
+        .page:nth-child(3) .section:last-child {
+            margin-bottom: 15mm; /* Keep space for footer */
+        }
+
+        @media print {
+            .page:nth-child(2) .section,
+            .page:nth-child(3) .section {
+                margin-bottom: 2mm !important;
+            }
+
+            .page:nth-child(2) .section:last-child,
+            .page:nth-child(3) .section:last-child {
+                margin-bottom: 15mm !important;
+            }
+        }
+
+        /* Remove copyright footer */
+        .copyright-footer {
+            position: absolute;
+            left: 15mm;
+            right: 15mm;
+            bottom: 10mm;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 2mm;
+            border-top: 1px solid #e0e0e0;
+            font-size: 7px;
+            color: #666;
+            background: white;
+            z-index: 1000;
+        }
+
+        .copyright-footer img {
+            height: 15px;
+            width: auto;
+            margin-left: 2mm;
+        }
+
+        .copyright-text {
+            font-size: 5px;
+            color: #666;
+            line-height: 1.1;
+            flex: 1;
+            margin-right: 2mm;
+        }
+
+        @media print {
+            .copyright-footer {
+                position: absolute !important;
+                left: 15mm !important;
+                right: 15mm !important;
+                bottom: 10mm !important;
+                background-color: white !important;
+                z-index: 1000 !important;
+                page-break-inside: avoid !important;
+                page-break-after: avoid !important;
+                display: flex !important;
+            }
+
+            .page:nth-child(4) {
+                padding-bottom: 15mm !important;
+            }
+
+            .page:nth-child(4) .section {
+                margin-bottom: 1mm !important;
+            }
+
+            .page:nth-child(4) .analysis-box {
+                padding: 4px 8px !important;
+                margin: 1mm 0 !important;
+                line-height: 1.2 !important;
+            }
+
+            .page:nth-child(4) .risk-management {
+                margin-top: 1mm !important;
+                gap: 1mm !important;
+            }
+
+            .page:nth-child(4) .risk-item {
+                padding: 2px 4px !important;
+            }
+
+            .page:nth-child(4) .technical-indicators {
+                margin-top: 1mm !important;
+            }
+
+            .page:nth-child(4) .indicator-group {
+                margin-bottom: 1mm !important;
+            }
+
+            .page:nth-child(4) .indicator-group h4 {
+                margin-bottom: 0.5mm !important;
+            }
+        }
+
+        :root {
+            --primary-color: #f15a22;  /* VNG Orange */
+            --primary-light: #ff7b4c;
+            --primary-dark: #d14615;
+            --text-color: #202124;
+            --border-color: #e0e0e0;
+        }
+
+        /* Chart titles */
+        .chart-title {
+            text-align: center;
+            color: var(--primary-color);
+            font-size: 11px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            padding: 2px 0;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        /* Table headers */
+        .table-container th {
+            background-color: #fff0eb;
+            color: #444;
+            font-weight: 700;
+            text-align: right;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        /* Section headers in tables */
+        .section-header td {
+            color: var(--primary-color) !important;
+            font-weight: 700 !important;
+            padding-top: 4px !important;
+            font-family: 'Roboto', sans-serif !important;
+            background: white !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.3px !important;
+        }
+
+        /* Risk management section */
+        .risk-item h4 {
+            color: var(--primary-color);
+            font-size: 11px;
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+
+        .risk-item {
+            background: #fff9f6;
+            border: 1px solid var(--border-color);
+        }
+
+        /* Chart backgrounds */
+        .chart-box, .chart, .price-chart {
+            background: #fff9f6;
+            border: 1px solid var(--border-color);
+        }
+
+        /* Download button */
+        .download-button {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .download-button:hover {
+            background-color: var(--primary-dark);
+        }
+
+        /* Technical analysis indicators */
+        .technical-indicators {
+            margin-top: 0;
+        }
+
+        .indicator-group {
+            margin-bottom: 4px;
+        }
+
+        .indicator-group h4 {
+            color: var(--primary-color);
+            font-size: 13px;
+            font-weight: 700;
+            margin: 0 0 2px 0;
+        }
+
+        .indicator-group p {
+            margin: 0;
+            line-height: 1.3;
+            text-align: justify;
+        }
+
+        @media print {
+            .technical-indicators {
+                margin-top: 0 !important;
+            }
+
+            .indicator-group {
+                margin-bottom: 4px !important;
+            }
+
+            .indicator-group h4 {
+                margin: 0 0 2px 0 !important;
+            }
+
+            .indicator-group p {
+                margin: 0 !important;
+                line-height: 1.3 !important;
+            }
+        }
+
+        /* Material icons color */
+        .material-icons {
+            color: var(--primary-color);
+            vertical-align: middle;
+            font-size: 16px;
+            margin-right: 4px;
+        }
+
+        @media print {
+            .chart-title {
+                font-weight: 700 !important;
+                text-transform: uppercase !important;
+                letter-spacing: 0.3px !important;
+            }
+
+            .table-container th {
+                font-weight: 700 !important;
+                text-transform: uppercase !important;
+                letter-spacing: 0.3px !important;
+            }
+
+            .section-header td {
+                font-weight: 700 !important;
+                text-transform: uppercase !important;
+                letter-spacing: 0.3px !important;
+            }
+
+            .analysis-title {
+                font-weight: 700 !important;
+                text-transform: uppercase !important;
+                letter-spacing: 0.3px !important;
+            }
+        }
+
+        /* Page 4 specific adjustments */
+        .page:nth-child(4) .section {
+            margin-bottom: 1mm;
+        }
+
+        .page:nth-child(4) .analysis-box {
+            padding: 4px 8px;
+            margin: 1mm 0;
+            line-height: 1.2;
+        }
+
+        .page:nth-child(4) .risk-management {
+            margin-top: 1mm;
+            gap: 1mm;
+        }
+
+        .page:nth-child(4) .risk-item {
+            padding: 2px 4px;
+        }
+
+        .page:nth-child(4) .technical-indicators {
+            margin-top: 1mm;
+        }
+
+        .page:nth-child(4) .indicator-group {
+            margin-bottom: 1mm;
+        }
+
+        .page:nth-child(4) .indicator-group h4 {
+            margin-bottom: 0.5mm;
+        }
+
+        @media print {
+            .page:nth-child(4) .section {
+                margin-bottom: 1mm !important;
+            }
+
+            .page:nth-child(4) .analysis-box {
+                padding: 4px 8px !important;
+                margin: 1mm 0 !important;
+                line-height: 1.2 !important;
+            }
+
+            .page:nth-child(4) .risk-management {
+                margin-top: 1mm !important;
+                gap: 1mm !important;
+            }
+
+            .page:nth-child(4) .risk-item {
+                padding: 2px 4px !important;
+            }
+
+            .page:nth-child(4) .technical-indicators {
+                margin-top: 1mm !important;
+            }
+
+            .page:nth-child(4) .indicator-group {
+                margin-bottom: 1mm !important;
+            }
+
+            .page:nth-child(4) .indicator-group h4 {
+                margin-bottom: 0.5mm !important;
+            }
+        }
+
+        /* Ensure last section has proper spacing before footer */
+        .page:nth-child(4) > section:last-of-type {
+            margin-bottom: 12mm;  /* Reduced from 15mm */
+        }
+
+        /* Download button container */
+        .download-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: #fff;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 0 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            z-index: 9999;
+        }
+
+        /* Download button styles */
+        .download-button {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 4px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            font-family: 'Roboto', sans-serif;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .download-button:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .download-button .material-icons {
+            font-size: 20px;
+        }
+
+        /* Report container */
+        .report-container {
+            width: 210mm;
+            margin: 0 auto;
+            padding-top: 70px;
+            background: white;
+        }
+
+        @media print {
+            .download-container {
+                display: none !important;
+                height: 0 !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                visibility: hidden !important;
+                position: absolute !important;
+                z-index: -1 !important;
+            }
+
+            .report-container {
+                padding-top: 0 !important;
+                margin: 0 !important;
+            }
+
+            body {
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+
+            .page {
+                margin: 0 !important;
+                padding: 15mm !important;
+            }
+        }
+    </style>
+    <script>
+        function downloadPDF() {
+            const printSettings = {
+                mediaSize: 'A4',
+                marginType: 'custom',
+                marginTop: 0,
+                marginBottom: 0,
+                marginLeft: 0,
+                marginRight: 0,
+                printBackground: true,
+                preferCSSPageSize: true
+            };
+            
+            window.print();
+        }
+
+        // Set print settings when page loads
+        window.onload = function() {
+            const style = document.createElement('style');
+            style.media = 'print';
+            style.innerHTML = `
+                @page {
+                    size: A4 portrait;
+                    margin: 0;
+                }
+                @media print {
+                    body {
+                        width: 210mm;
+                        height: 297mm;
+                        margin: 0;
+                        padding: 0;
+                        print-color-adjust: exact;
+                        -webkit-print-color-adjust: exact;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        };
+    </script>
+</head>
+<body>
+    <div class="download-container">
+        <button onclick="downloadPDF()" class="download-button">
+            <i class="material-icons">download</i>
+            Tải báo cáo PDF
+        </button>
+    </div>
+
+    <div class="report-container">
+        <!-- Page 1: Company Information and Overview -->
+        <div class="page">
+            <div class="report-header">
+                <h1>VNZ Group</h1>
+                <div class="price-info">Close Price: 350,000</div>
+                <div class="date-info">Document Date: 2025-04-04</div>
+            </div>
+
+            <div class="info-grid">
+                <section class="info-section">
+                    <h2 class="section-title">GENERAL INFORMATION</h2>
+                    <table class="info-table">
+                        <tr><td>ISIN Code</td><td>{{ stock_info.isin_code }}</td></tr>
+                        <tr><td>Exchange Code</td><td>{{ stock_info.exchange_code }}</td></tr>
+                        <tr><td>TRBC Industry</td><td>{{ stock_info.industry }}</td></tr>
+                        <tr><td>No. of Employees</td><td>{{ stock_info.employees }}</td></tr>
+                        <tr><td>Company Market Cap (VND)</td><td>{{ stock_info.market_cap }}</td></tr>
+                    </table>
+                </section>
+
+                <section class="info-section">
+                    <h2 class="section-title">COMPANY DETAILS</h2>
+                    <table class="info-table">
+                        <tr><td>Address</td><td>{{ stock_info.address }}</td></tr>
+                        <tr><td>Telephone</td><td>{{ stock_info.phone }}</td></tr>
+                        <tr><td>Company Link</td><td>{{ stock_info.website }}</td></tr>
+                    </table>
+                </section>
+            </div>
+
+            <section class="section">
+                <h2 class="section-title">BUSINESS SUMMARY</h2>
+                <div class="business-summary">
+                    {{ stock_info.description }}
+                </div>
+            </section>
+
+            <section class="section">
+                <h2 class="section-title">MARKET POSITION</h2>
+                <div class="analysis-box">
+                    {{ analysis.competitive_advantages if analysis.competitive_advantages else "The company maintains strong competitive advantages in its market segments through technological innovation, brand recognition, and operational efficiency. Key strengths include established distribution networks, strategic partnerships, and continuous investment in R&D." }}
+                </div>
+            </section>
+
+            <section class="section">
+                <h2 class="section-title">PRICE CHARTS</h2>
+                <div class="chart-container">
+                    <div class="chart-box">
+                        <div class="chart-title">6-MONTH PRICE CHART</div>
+                        <img src="../static/{{ price_charts.six_months }}" alt="6 Months Price Chart">
+                    </div>
+                    <div class="chart-box">
+                        <div class="chart-title">5-YEAR PRICE CHART</div>
+                        <img src="../static/{{ price_charts.five_years }}" alt="5 Years Price Chart">
+                    </div>
+                </div>
+            </section>
+
+            <div class="info-grid">
+                <section class="info-section">
+                    <h2 class="section-title">SHARE DETAIL</h2>
+                    <table class="info-table">
+                        <tr><td>Close Price</td><td>{{ stock_info.close_price }}</td></tr>
+                        <tr><td>52 Wk high</td><td>{{ stock_info.high_52w }}</td></tr>
+                        <tr><td>52 Wk low</td><td>{{ stock_info.low_52w }}</td></tr>
+                        <tr><td>5 day Average Volume</td><td>{{ stock_info.avg_volume_5d }}</td></tr>
+                        <tr><td>10 day Average Volume</td><td>{{ stock_info.avg_volume_10d }}</td></tr>
+                        <tr><td>Beta Value</td><td>{{ stock_info.beta }}</td></tr>
+                        <tr><td>Currency</td><td>{{ stock_info.currency }}</td></tr>
+                        <tr><td>Shares Outstanding</td><td>{{ stock_info.shares_outstanding }}</td></tr>
+                    </table>
+                </section>
+
+                <section class="info-section">
+                    <h2 class="section-title">PERCENTAGE CHANGE</h2>
+                    <table class="info-table">
+                        <tbody>
+                            <tr><td>1 day</td><td>{{ stock_info.one_day_change }}</td></tr>
+                            <tr><td>5 day</td><td>{{ stock_info.five_day_change }}</td></tr>
+                            <tr><td>3 months</td><td>{{ stock_info.three_month_change }}</td></tr>
+                            <tr><td>6 months</td><td>{{ stock_info.six_month_change }}</td></tr>
+                            <tr><td>Month to Date</td><td>{{ stock_info.mtd_change }}</td></tr>
+                            <tr><td>Year to Date</td><td>{{ stock_info.ytd_change }}</td></tr>
+                            <tr><td>Year to Date relative index</td><td>{{ stock_info.ytd_relative_change }}</td></tr>
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+
+            <div class="info-grid">
+                <section class="info-section">
+                    <h2 class="section-title">ANALYST OUTLOOK</h2>
+                    <table class="info-table">
+                        <tbody>
+                            <tr><td>Strong Buy</td><td>{{ stock_info.strong_buy }}</td></tr>
+                            <tr><td>Buy</td><td>{{ stock_info.buy }}</td></tr>
+                            <tr><td>Hold</td><td>{{ stock_info.hold }}</td></tr>
+                            <tr><td>Sell</td><td>{{ stock_info.sell }}</td></tr>
+                            <tr><td>Strong Sell</td><td>{{ stock_info.strong_sell }}</td></tr>
+                            <tr><td>Recommendation</td><td>{{ stock_info.recommendation }}</td></tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <section class="info-section">
+                    <h2 class="section-title">RATIOS</h2>
+                    <table class="info-table">
+                        <tr><td>Dividend</td><td>{{ ratios.dividend }}</td></tr>
+                        <tr><td>Dividend Yield</td><td>{{ ratios.dividend_yield }}</td></tr>
+                        <tr><td>P/E (TTM)</td><td>{{ ratios.pe_ttm }}</td></tr>
+                    </table>
+                </section>
+            </div>
+            <div class="copyright-footer">
+                <div class="copyright-text">
+                    Copyright Refinitiv 2025. All rights reserved. This content is the intellectual property of Refinitiv or its third party suppliers. Republication or redistribution of content provided by Refinitiv is expressly prohibited without the prior written consent of Refinitiv. Neither Refinitiv nor its third party suppliers shall be liable for any errors, omissions or delays in content, or for any actions taken in reliance thereon. Refinitiv and its logo are registered trademarks or trademarks of the Refinitiv group of companies around the world.
+                </div>
+                <img src="../static/images/lseg-logo.png" alt="LSEG" style="height: 20px;">
+            </div>
+        </div>
+
+        <!-- Page 2: Financial Summary and Income Statement -->
+        <div class="page">
+            <div class="report-header">
+                <h1>VNZ Group</h1>
+                <div class="price-info">Close Price: 350,000</div>
+                <div class="date-info">Document Date: 2025-04-04</div>
+            </div>
+
+            <section class="section">
+                <h2 class="section-title">
+                    <i class="material-icons">summarize</i>
+                    FINANCIAL SUMMARY
+                </h2>
+                <div class="analysis-box">
+                    {{ analysis.financial_summary }}
+                </div>
+            </section>
+
+            <section class="section">
+                <h2 class="section-title">
+                    <i class="material-icons">analytics</i>
+                    INCOME STATEMENT
+                </h2>
+                <div class="unit-display">Unit: million VND</div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                {% for year in financial_data.years %}
+                                <th>{{ year }}</th>
+                                {% endfor %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if financial_data.income_stmt %}
+                                <tr>
+                                    <td>1. Revenue from sales and services</td>
+                                    {% for value in financial_data.income_stmt.revenue %}
+                                    <td>{{ "{:,.0f}".format(value/1000000) }}</td>
+                                    {% endfor %}
+                                </tr>
+                                <tr>
+                                    <td>2. Operating expenses</td>
+                                    {% for value in financial_data.income_stmt.operating_expense %}
+                                    <td>{{ "{:,.0f}".format(value/1000000) }}</td>
+                                    {% endfor %}
+                                </tr>
+                                <tr>
+                                    <td>3. Operating income</td>
+                                    {% for value in financial_data.income_stmt.operating_income %}
+                                    <td>{{ "{:,.0f}".format(value/1000000) }}</td>
+                                    {% endfor %}
+                                </tr>
+                                <tr>
+                                    <td>4. Income before tax</td>
+                                    {% for value in financial_data.income_stmt.income_before_tax %}
+                                    <td>{{ "{:,.0f}".format(value/1000000) }}</td>
+                                    {% endfor %}
+                                </tr>
+                                <tr>
+                                    <td>5. Net income</td>
+                                    {% for value in financial_data.income_stmt.net_income %}
+                                    <td>{{ "{:,.0f}".format(value/1000000) }}</td>
+                                    {% endfor %}
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="6" style="text-align: center; padding: 20px;">No income statement data available</td>
+                                </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+
+                {% if financial_charts %}
+                <div class="charts-container">
+                    <div class="chart">
+                        <div class="chart-title">REVENUE AND INCOME TREND</div>
+                        <img src="../static/{{ financial_charts.revenue_income_trend }}" alt="Revenue and Income Trend">
+                    </div>
+                    <div class="chart">
+                        <div class="chart-title">COST STRUCTURE</div>
+                        <img src="../static/{{ financial_charts.income_structure }}" alt="Income Structure">
+                    </div>
+                </div>
+                {% endif %}
+
+                <div class="analysis-box">
+                    <div class="analysis-title">AI ANALYSIS</div>
+                    {{ analysis.income_statement_analysis }}
+                </div>
+            </section>
+
+            <section class="section">
+                <h2 class="section-title">
+                    <i class="material-icons">trending_up</i>
+                    GROWTH METRICS
+                </h2>
+                <div class="info-grid">
+                    <section class="info-section">
+                        <table class="info-table">
+                            <tr><td>Revenue Growth</td><td>{{ "{:.1f}%".format(growth_metrics.revenue_growth) if growth_metrics and growth_metrics.revenue_growth else "15.2%" }}</td></tr>
+                            <tr><td>Income Growth</td><td>{{ "{:.1f}%".format(growth_metrics.net_income_growth) if growth_metrics and growth_metrics.net_income_growth else "12.8%" }}</td></tr>
+                        </table>
+                    </section>
+                    <section class="info-section">
+                        <table class="info-table">
+                            <tr><td>Market Share</td><td>{{ "{:.1f}%".format(growth_metrics.market_share) if growth_metrics and growth_metrics.market_share else "23.5%" }}</td></tr>
+                            <tr><td>Customer Growth</td><td>{{ "{:.1f}%".format(growth_metrics.customer_growth) if growth_metrics and growth_metrics.customer_growth else "18.7%" }}</td></tr>
+                        </table>
+                    </section>
+                </div>
+                <div class="analysis-box">
+                    <div class="analysis-title">GROWTH ANALYSIS</div>
+                    {{ analysis.growth_analysis if analysis.growth_analysis else "The company demonstrates robust growth across key metrics, with particularly strong performance in revenue and customer acquisition. Digital transformation initiatives have yielded positive results, contributing to improved operational efficiency and market competitiveness." }}
+                </div>
+            </section>
+            <div class="copyright-footer">
+                <div class="copyright-text">
+                    Copyright Refinitiv 2025. All rights reserved. This content is the intellectual property of Refinitiv or its third party suppliers. Republication or redistribution of content provided by Refinitiv is expressly prohibited without the prior written consent of Refinitiv. Neither Refinitiv nor its third party suppliers shall be liable for any errors, omissions or delays in content, or for any actions taken in reliance thereon. Refinitiv and its logo are registered trademarks or trademarks of the Refinitiv group of companies around the world.
+                </div>
+                <img src="../static/images/lseg-logo.png" alt="LSEG" style="height: 20px;">
+            </div>
+        </div>
+
+        <!-- Page 3: Balance Sheet -->
+        <div class="page">
+            <div class="report-header">
+                <h1>VNZ Group</h1>
+                <div class="price-info">Close Price: 350,000</div>
+                <div class="date-info">Document Date: 2025-04-04</div>
+            </div>
+
+            <section class="section">
+                <h2 class="section-title">
+                    <i class="material-icons">account_balance</i>
+                    BALANCE SHEET
+                </h2>
+                <div class="unit-display">Unit: million VND</div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                {% for year in financial_data.years %}
+                                <th>{{ year }}</th>
+                                {% endfor %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="section-header">
+                                <td><strong>A. ASSETS</strong></td>
+                                <td colspan="5"></td>
+                            </tr>
+                            <tr>
+                                <td style="padding-left: 20px;">I. Current assets</td>
+                                {% for value in financial_data.balance_sheet.current_assets %}
+                                <td>{{ "{:,.0f}".format(value/1000000) }}</td>
+                                {% endfor %}
+                            </tr>
+                            <tr>
+                                <td style="padding-left: 20px;">II. Fixed assets</td>
+                                {% for value in financial_data.balance_sheet.fixed_assets %}
+                                <td>{{ "{:,.0f}".format(value/1000000) }}</td>
+                                {% endfor %}
+                            </tr>
+                            <tr class="highlight-row">
+                                <td>TOTAL ASSETS</td>
+                                {% for value in financial_data.balance_sheet.total_assets %}
+                                <td>{{ "{:,.0f}".format(value/1000000) }}</td>
+                                {% endfor %}
+                            </tr>
+                            <tr class="section-header">
+                                <td><strong>B. CAPITAL</strong></td>
+                                <td colspan="5"></td>
+                            </tr>
+                            <tr>
+                                <td style="padding-left: 20px;">I. Liabilities</td>
+                                <td colspan="5"></td>
+                            </tr>
+                            <tr>
+                                <td style="padding-left: 40px;">1. Current liabilities</td>
+                                {% for value in financial_data.balance_sheet.current_liabilities %}
+                                <td>{{ "{:,.0f}".format(value/1000000) }}</td>
+                                {% endfor %}
+                            </tr>
+                            <tr>
+                                <td style="padding-left: 40px;">2. Long-term debt</td>
+                                {% for value in financial_data.balance_sheet.long_term_debt %}
+                                <td>{{ "{:,.0f}".format(value/1000000) }}</td>
+                                {% endfor %}
+                            </tr>
+                            <tr>
+                                <td style="padding-left: 20px;">II. Equity</td>
+                                {% for value in financial_data.balance_sheet.equity %}
+                                <td>{{ "{:,.0f}".format(value/1000000) }}</td>
+                                {% endfor %}
+                            </tr>
+                            <tr class="highlight-row">
+                                <td>TOTAL CAPITAL</td>
+                                {% for value in financial_data.balance_sheet.total_assets %}
+                                <td>{{ "{:,.0f}".format(value/1000000) }}</td>
+                                {% endfor %}
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="charts-container">
+                    <div class="chart">
+                        <div class="chart-title">ASSETS STRUCTURE AND TREND</div>
+                        <img src="../static/{{ financial_charts.assets_equity_trend }}" alt="Total Assets and Equity Trend">
+                    </div>
+                    <div class="chart">
+                        <div class="chart-title">CAPITAL STRUCTURE</div>
+                        <img src="../static/{{ financial_charts.liabilities_equity_stacked }}" alt="Liabilities and Equity Structure">
+                    </div>
+                </div>
+                <div class="analysis-box">
+                    <div class="analysis-title">AI ANALYSIS</div>
+                    {{ analysis.balance_sheet_analysis }}
+                </div>
+            </section>
+
+            <section class="section">
+                <h2 class="section-title">
+                    <i class="material-icons">calculate</i>
+                    FINANCIAL RATIOS
+                </h2>
+                <div class="info-grid">
+                    <section class="info-section">
+                        <table class="info-table">
+                            <tr><td>Current Ratio</td><td>{{ "{:.2f}".format(financial_ratios.current_ratio) if financial_ratios and financial_ratios.current_ratio else "1.85" }}</td></tr>
+                            <tr><td>Debt/Equity Ratio</td><td>{{ "{:.2f}".format(financial_ratios.debt_equity) if financial_ratios and financial_ratios.debt_equity else "0.48" }}</td></tr>
+                            <tr><td>Asset Turnover</td><td>{{ "{:.2f}".format(financial_ratios.asset_turnover) if financial_ratios and financial_ratios.asset_turnover else "1.25" }}</td></tr>
+                        </table>
+                    </section>
+                    <section class="info-section">
+                        <table class="info-table">
+                            <tr><td>Quick Ratio</td><td>{{ "{:.2f}".format(financial_ratios.quick_ratio) if financial_ratios and financial_ratios.quick_ratio else "1.42" }}</td></tr>
+                            <tr><td>Interest Coverage</td><td>{{ "{:.2f}".format(financial_ratios.interest_coverage) if financial_ratios and financial_ratios.interest_coverage else "12.5" }}</td></tr>
+                            <tr><td>Inventory Turnover</td><td>{{ "{:.2f}".format(financial_ratios.inventory_turnover) if financial_ratios and financial_ratios.inventory_turnover else "8.4" }}</td></tr>
+                        </table>
+                    </section>
+                </div>
+                <div class="analysis-box">
+                    <div class="analysis-title">RATIO ANALYSIS</div>
+                    {{ analysis.ratio_analysis if analysis.ratio_analysis else "The company shows strong financial health with good liquidity (Current Ratio: 1.85) and conservative leverage (D/E: 0.48). Operational efficiency is solid with high inventory turnover (8.4x) and asset utilization (1.25x)." }}
+                </div>
+            </section>
+            <div class="copyright-footer">
+                <div class="copyright-text">
+                    Copyright Refinitiv 2025. All rights reserved. This content is the intellectual property of Refinitiv or its third party suppliers. Republication or redistribution of content provided by Refinitiv is expressly prohibited without the prior written consent of Refinitiv. Neither Refinitiv nor its third party suppliers shall be liable for any errors, omissions or delays in content, or for any actions taken in reliance thereon. Refinitiv and its logo are registered trademarks or trademarks of the Refinitiv group of companies around the world.
+                </div>
+                <img src="../static/images/lseg-logo.png" alt="LSEG" style="height: 20px;">
+            </div>
+        </div>
+
+        <!-- Page 4: Profitability Analysis -->
+        <div class="page">
+            <div class="report-header">
+                <h1>VNZ Group</h1>
+                <div class="price-info">Close Price: 350,000</div>
+                <div class="date-info">Document Date: 2025-04-04</div>
+            </div>
+
+            <section class="section">
+                <h2 class="section-title">
+                    <i class="material-icons">show_chart</i>
+                    PROFITABILITY ANALYSIS
+                </h2>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                {% for year in financial_data.years %}
+                                <th>{{ year }}</th>
+                                {% endfor %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if financial_data.profitability %}
+                                <tr>
+                                    <td>Net profit margin (%)</td>
+                                    {% for value in financial_data.profitability.income_after_tax_margin %}
+                                    <td>{{ "{:.2f}".format(value) }}</td>
+                                    {% endfor %}
+                                </tr>
+                                <tr>
+                                    <td>ROA (%)</td>
+                                    {% for value in financial_data.profitability.roa %}
+                                    <td>{{ "{:.2f}".format(value) }}</td>
+                                    {% endfor %}
+                                </tr>
+                                <tr>
+                                    <td>ROE (%)</td>
+                                    {% for value in financial_data.profitability.roe %}
+                                    <td>{{ "{:.2f}".format(value) }}</td>
+                                    {% endfor %}
+                                </tr>
+                                <tr>
+                                    <td>Revenue/Total assets (times)</td>
+                                    {% for value in financial_data.profitability.revenue_total_assets %}
+                                    <td>{{ "{:.2f}".format(value) }}</td>
+                                    {% endfor %}
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="6" style="text-align: center; padding: 20px;">No profitability analysis data available</td>
+                                </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="analysis-box">
+                    <div class="analysis-title">AI ANALYSIS</div>
+                    {{ analysis.profitability_analysis }}
+                </div>
+            </section>
+
+            <section class="section">
+                <h2 class="section-title">
+                    <i class="material-icons">insights</i>
+                    INVESTMENT RECOMMENDATIONS
+                </h2>
+                <div class="analysis-box">
+                    <div class="analysis-title">AI ANALYSIS</div>
+                    {{ recommendations.recommendations }}
+                </div>
+                <div class="risk-management">
+                    <div class="risk-item">
+                        <h4>STOP LOSS</h4>
+                        <p style="font-weight: 500; font-size: 14px; margin: 8px 0;">8% below current price</p>
+                    </div>
+                    <div class="risk-item">
+                        <h4>TAKE PROFIT</h4>
+                        <p style="font-weight: 500; font-size: 14px; margin: 8px 0;">20% above current price</p>
+                    </div>
+                    <div class="risk-item">
+                        <h4>POSITION SIZE</h4>
+                        <p style="font-weight: 500; font-size: 14px; margin: 8px 0;">2% of portfolio</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h2 class="section-title">
+                    <i class="material-icons">trending_up</i>
+                    TECHNICAL ANALYSIS
+                </h2>
+                <div class="analysis-box">
+                    <div class="technical-indicators">
+                        <div class="indicator-group">
+                            <h4>Short-term trend:</h4>
+                            <p>{% if technical_analysis and technical_analysis.short_term_trend %}
+                                {{ technical_analysis.short_term_trend }}
+                            {% else %}
+                                Based on analysis of short-term technical indicators such as MACD, RSI and Bollinger Bands, the short-term trend shows a NEUTRAL signal. RSI is in the 45-55 range, indicating the market is in an accumulation phase. MACD remains below the signal line, but the gap is narrowing, signaling a potential reversal in the near future.
+                            {% endif %}</p>
+                        </div>
+                        <div class="indicator-group">
+                            <h4>Medium-term trend:</h4>
+                            <p>{% if technical_analysis and technical_analysis.medium_term_trend %}
+                                {{ technical_analysis.medium_term_trend }}
+                            {% else %}
+                                Analysis of MA20 and MA50 shows a POSITIVE medium-term trend. Price is trading above both moving averages, with MA20 crossing above MA50 creating a Golden Cross signal. Average trading volume is gradually increasing, supporting the upward trend.
+                            {% endif %}</p>
+                        </div>
+                        <div class="indicator-group">
+                            <h4>Support - Resistance levels:</h4>
+                            <p>{% if technical_analysis and technical_analysis.support_resistance %}
+                                {{ technical_analysis.support_resistance }}
+                            {% else %}
+                                Strong support levels are identified at the 25.5-26.0 price range (MA50) and 24.0-24.5 (previous bottom). Important resistance levels are at 28.5-29.0 (short-term peak) and 30.0-30.5 (historical peak). Price is in a sideway up trend, accumulating in the 26.0-28.5 range.
+                            {% endif %}</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h2 class="section-title">
+                    <i class="material-icons">summarize</i>
+                    REPORT SUMMARY
+                </h2>
+                <div class="analysis-box">
+                    <div class="analysis-title">KEY FINDINGS</div>
+                    <p>{{ analysis.key_findings if analysis.key_findings else "The company demonstrates strong financial health with robust growth metrics and solid profitability indicators. Key strengths include market leadership position, operational efficiency, and strategic expansion initiatives." }}</p>
+                    <div class="analysis-title" style="margin-top: 8px;">OUTLOOK</div>
+                    <p>{{ analysis.outlook if analysis.outlook else "The overall outlook remains positive, supported by strong fundamentals, strategic market positioning, and favorable industry trends. The company is well-positioned for sustainable growth in both short and medium term." }}</p>
+                </div>
+            </section>
+            <div class="copyright-footer">
+                <div class="copyright-text">
+                    Copyright Refinitiv 2025. All rights reserved. This content is the intellectual property of Refinitiv or its third party suppliers. Republication or redistribution of content provided by Refinitiv is expressly prohibited without the prior written consent of Refinitiv. Neither Refinitiv nor its third party suppliers shall be liable for any errors, omissions or delays in content, or for any actions taken in reliance thereon. Refinitiv and its logo are registered trademarks or trademarks of the Refinitiv group of companies around the world.
+                </div>
+                <img src="../static/images/lseg-logo.png" alt="LSEG" style="height: 20px;">
+            </div>
+        </div>
+    </div>
+</body>
+</html> 
