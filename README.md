@@ -1,93 +1,66 @@
-# Financial Analysis System
+# Financial Report Generator
 
-A comprehensive financial analysis system that provides detailed analysis of stocks using financial data, technical indicators, and AI-powered insights.
+Hệ thống tạo báo cáo tài chính chuyên nghiệp với định dạng A4 chuẩn cho in ấn.
 
-## Features
+## Yêu cầu cài đặt
+## Cài đặt GTK3 (Bắt buộc cho WeasyPrint)
 
-- Stock information retrieval
-- Financial data analysis
-- Technical indicator calculations
-- Interactive charts and visualizations
-- AI-powered financial analysis using Google's Gemini
-- Professional HTML report generation
-- PDF report export
-- Web interface for easy access
+### Windows:
+1. Tải GTK3 từ: https://github.com/tschoonj/GTK-for-Windows-Runtime-Environment-Installer/releases
+2. Chạy file cài đặt GTK3-Runtime Win64
+3. Thêm đường dẫn vào PATH (thường là `C:\Program Files\GTK3-Runtime Win64\bin`)
 
-## Installation
-
-1. Clone the repository:
+## Các bước chạy ứng dụng
+1. Cài đặt môi trường:
 ```bash
-git clone <repository-url>
-cd financial-analysis-system
-```
-
-2. Create a virtual environment and activate it:
-```bash
+# Tạo và kích hoạt môi trường ảo
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-```
 
-3. Install dependencies:
-```bash
+# Windows
+.\venv\Scripts\activate
+
+# Linux/Mac
+source venv/bin/activate
+
+# Cài đặt thư viện
+python -m pip install --upgrade pip
 pip install -r requirements.txt
+
 ```
-
-4. Set up your Gemini API key:
-```bash
-export GEMINI_API_KEY=AIzaSyCFyqIp-sg4iqs3LMOoFNrgjlIlb-pPnQg  # On Windows: set GEMINI_API_KEY=your-api-key-here
-```
-
-## Usage
-
-1. Start the web application:
+2. Chạy ứng dụng:
 ```bash
 python App/app.py
 ```
 
-2. Open your web browser and navigate to `http://localhost:5000`
+## Tạo PDF
+1. Từ trình duyệt, chọn một trong hai cách:
+- Click nút "Tải báo cáo PDF"
+- Hoặc nhấn Ctrl+P (Windows) / Cmd+P (Mac)
+2. Thiết lập PDF:
+- Đích: Save as PDF
+- Khổ giấy: A4
+- Lề: None
+- Tỷ lệ: 100%
+- Đồ họa nền: Bật
 
-3. Enter a stock symbol (e.g., AAPL, GOOGL, MSFT) and click "Analyze"
+## Xử lý lỗi thường gặp
 
-4. View the generated report and download it as PDF if needed
-
-## Project Structure
-
-```
-.
-├── App/
-│   ├── app.py              # Flask web application
-│   ├── templates/          # HTML templates
-│   └── reports/           # Generated reports
-├── Process/
-│   ├── readdata.py        # Data retrieval functions
-│   ├── calculate.py       # Financial calculations
-│   ├── drawchart.py       # Chart generation
-│   ├── ai_analyst.py      # AI analysis using Gemini
-│   ├── generate_report.py # HTML report generation
-│   └── export_pdf.py      # PDF export functionality
-├── requirements.txt       # Project dependencies
-└── README.md             # Project documentation
+1. Lỗi cài đặt thư viện:
+```bash
+pip install --upgrade setuptools wheel
+pip install -r requirements.txt
 ```
 
-## Dependencies
+2. Lỗi không chạy được:
+- Kiểm tra đã activate môi trường ảo
+- Chạy lại lệnh cài đặt thư viện
 
-- Flask: Web framework
-- Pandas: Data manipulation
-- NumPy: Numerical computations
-- yfinance: Stock data retrieval
-- Plotly: Interactive charts
-- Jinja2: HTML templating
-- WeasyPrint: PDF generation
-- Google Generative AI: AI analysis
+3. Lỗi tạo PDF:
+- Dùng Chrome/Chromium
+- Đảm bảo đúng thiết lập in
 
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Commit your changes
-4. Push to the branch
-5. Create a Pull Request
+## Hỗ trợ
+Tạo issue trên GitHub hoặc liên hệ: [your-email/contact]
 
 ## License
-
-This project is licensed under the MIT License - see the LICENSE file for details. 
+Dự án này là tài sản độc quyền. Nghiêm cấm sao chép khi chưa được phép.
